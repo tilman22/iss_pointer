@@ -9,7 +9,10 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/iss_pointer",
-            "args": [],
+            "args": [
+                /*Breite=*/ "-48.1491",
+                /*Laenge=*/ "21.4662"
+            ],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "environment": [],

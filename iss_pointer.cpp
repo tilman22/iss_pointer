@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <iomanip>
 #include <stdio.h>
 #include "/home/tilman/tools/include/eigen3/Eigen/Dense"
 
@@ -24,9 +25,23 @@ static Eigen::Vector3d ToCartesian(double lat, double lon, double r)
     return p;
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
-#if 0
+    if (argc != 3)
+    {
+        std::cout << "Anwendung: iss_pointer <Breite_von_ISS> <Laenge_von_ISS>" << std::endl;
+        std::cout << "Standort ist fest auf München kodiert." << std::endl;
+        return 1;
+    }
+
+#if 1
+    double pointer_r   = 6400;
+    double pointer_lat = 48.142870;
+    double pointer_lon = 11.647197;
+    double iss_r   = pointer_r + 410;
+    double iss_lat = std::stod(argv[1]);
+    double iss_lon = std::stod(argv[2]);
+#elif 0
     // Ausgangssituation
     double pointer_lat = 48.142870;
     double pointer_lon = 11.647197;
@@ -75,6 +90,9 @@ int main(void)
     double winkel_neigung = to_winkelmass(std::acos(t3.dot(t2) / (t2.norm() * t3.norm())));
 
     // Die Winkel sind immer zwischen 0 und 180 Grad. Interpretieren...
+
+    std::cout << std::setprecision(2) << std::fixed << std::right;
+    std::cout << "Drehung: " << winkel_drehung << ", Neigung: " << winkel_neigung << std::endl;
 
     return 0;
 }
