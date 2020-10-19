@@ -27,20 +27,26 @@ static Eigen::Vector3d ToCartesian(double lat, double lon, double r)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 3)
+#if 1
+    if (argc < 3)
     {
         std::cout << "Anwendung: iss_pointer <Breite_von_ISS> <Laenge_von_ISS>" << std::endl;
         std::cout << "Standort ist fest auf München kodiert." << std::endl;
         return 1;
     }
 
-#if 1
     double pointer_r   = 6400;
     double pointer_lat = 48.142870;
     double pointer_lon = 11.647197;
     double iss_r   = pointer_r + 410;
     double iss_lat = std::stod(argv[1]);
     double iss_lon = std::stod(argv[2]);
+
+    if (argc >= 4) iss_r       = std::stod(argv[3]);
+    if (argc >= 5) pointer_lat = std::stod(argv[4]);
+    if (argc >= 6) pointer_lon = std::stod(argv[5]);
+    if (argc >= 7) pointer_r   = std::stod(argv[6]);
+
 #elif 0
     // Ausgangssituation
     double pointer_lat = 48.142870;
@@ -81,15 +87,8 @@ int main(int argc, char *argv[])
     double y = p.dot(ebene_y);
     double z = p.dot(ebene_z);
 
-    // Winkel in der Ebene: Ausrichtung des Pointers in der Ebene. Winkel zwischen Pfeil nach Nordpos und ISS
-    // (Siehe z.B. https://www.mathebibel.de/winkel-zwischen-zwei-vektoren)
-    Eigen::Vector3d t1(x, 0, 0);
-    Eigen::Vector3d t2(x, y, 0);
-    Eigen::Vector3d t3(x, y, z);
-    double winkel_drehung = to_winkelmass(std::acos(t2.dot(t1) / (t1.norm() * t2.norm())));
-    double winkel_neigung = to_winkelmass(std::acos(t3.dot(t2) / (t2.norm() * t3.norm())));
-
-    // Die Winkel sind immer zwischen 0 und 180 Grad. Interpretieren...
+    double winkel_drehung = to_winkelmass(std::acos(x/std::sqrt(x*x+y*y)));
+    double winkel_neigung = to_winkelmass(std::asin(z/std::sqrt(x*x+y*y+z*z)));
 
     std::cout << std::setprecision(2) << std::fixed << std::right;
     std::cout << "Drehung: " << winkel_drehung << ", Neigung: " << winkel_neigung << std::endl;
