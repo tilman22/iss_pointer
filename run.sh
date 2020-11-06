@@ -5,6 +5,6 @@ while true; do
     lon=$(echo $json | jq -r '.iss_position.longitude')
     echo "lat = $lat, lon = $lon"
     ./iss_pointer $lat $lon
-    sleep 1
+    sleep 5
 done
 

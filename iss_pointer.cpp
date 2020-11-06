@@ -82,16 +82,20 @@ int main(int argc, char *argv[])
     Eigen::Vector3d ebene_y(0, 1, 0);
     Eigen::Vector3d ebene_z = pointer_p / pointer_p.norm();
 
+    // std::cout << "pointer_p = " << pointer_p << ", iss_p = " << iss_p << std::endl;
+
     // Projektionen von p auf das Orthonormalsystem
     double x = p.dot(ebene_x);
     double y = p.dot(ebene_y);
     double z = p.dot(ebene_z);
 
-    double winkel_drehung = to_winkelmass(std::acos(x/std::sqrt(x*x+y*y)));
     double winkel_neigung = to_winkelmass(std::asin(z/std::sqrt(x*x+y*y+z*z)));
+    double winkel_drehung = to_winkelmass(std::acos(x/std::sqrt(x*x+y*y)));
+    if (y < 0)
+        winkel_drehung = 360 - winkel_drehung;   
 
     std::cout << std::setprecision(2) << std::fixed << std::right;
-    std::cout << "Drehung: " << winkel_drehung << ", Neigung: " << winkel_neigung << std::endl;
+    std::cout << "Drehung: " << winkel_drehung << ", Neigung: " << winkel_neigung << " (x=" << x << ", y=" << y << ", z=" << z << ")" << std::endl;
 
     return 0;
 }
